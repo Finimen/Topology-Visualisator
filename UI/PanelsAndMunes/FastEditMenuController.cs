@@ -67,6 +67,8 @@ namespace Assets.Scripts
             {
                 return;
             }
+
+            editMenu.gameObject.SetActive(false);
         }
 
         private void SelectStateMenu()

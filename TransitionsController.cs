@@ -1,9 +1,7 @@
 using Assets.Scripts.InputSystem;
 using Assets.Scripts.Topology;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Zenject;
 
 namespace Assets.Scripts
@@ -22,6 +20,8 @@ namespace Assets.Scripts
             transition = Instantiate(transitionPrefab, canvas);
 
             transition.StartPosition.position = Input.mousePosition;
+
+            transition.StartPosition = inputServise.SelectedTopologyObject.transform;
         }
 
         private void Select(TopologyObject objectSelected)
@@ -30,6 +30,8 @@ namespace Assets.Scripts
             {
                 return;
             }
+
+            transition.EndPosition = objectSelected.transform;
 
             if (objectSelected.GetComponentInParent<Interface>())
             {

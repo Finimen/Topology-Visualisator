@@ -28,8 +28,6 @@ namespace Assets.Scripts
 
         public void CreateClass()
         {
-            inputServise.gameObject.SetActive(true);
-
             Class newClass = Instantiate(classPrefab, sceneCanvas.transform);
 
             newClass.transform.position = new Vector3(cameraMain.transform.position.x + Random.Range(-5,5),cameraMain.transform.position.y + Random.Range(-5, 5), 10);
@@ -41,11 +39,13 @@ namespace Assets.Scripts
 
         public void CreateInterface()
         {
-            Interface newClass = Instantiate(interfacePrefab, sceneCanvas.transform);
+            Interface newInterface = Instantiate(interfacePrefab, sceneCanvas.transform);
 
-            newClass.transform.position = new Vector3(cameraMain.transform.position.x + Random.Range(-5, 5), cameraMain.transform.position.y + Random.Range(-5, 5), 10);
+            newInterface.transform.position = new Vector3(cameraMain.transform.position.x + Random.Range(-5, 5), cameraMain.transform.position.y + Random.Range(-5, 5), 10);
 
-            objectsLibary.Add(newClass);
+            newInterface.GetComponent<MoveableObject>().Setup(inputServise);
+
+            objectsLibary.Add(newInterface);
         }
     }
 }

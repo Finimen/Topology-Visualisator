@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Controls
 {
-    public class SceneScaler : MonoBehaviour
+    [Serializable] public class SceneScaler
     {
-        [SerializeField] private Transform scene;
+        private Transform scene;
 
         [SerializeField] private float coeff;
 
         private Vector3 newScale = Vector3.one;
 
-        private void Update()
+        internal void Initialize(Transform scene)
+        {
+            this.scene = scene;
+        }
+
+        internal void Update()
         {
             newScale += Vector3.one * Input.mouseScrollDelta.y * coeff;
 

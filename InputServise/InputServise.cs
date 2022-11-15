@@ -16,6 +16,12 @@ namespace Assets.Scripts.InputSystem
         [SerializeField] private KeyCode mouse0;
         [SerializeField] private KeyCode mouse1;
 
+        public TopologyObject SelectedTopologyObject
+        {
+            get;
+            private set; 
+        }
+
         private void Update()
         {
             PointerEventData pointer = new PointerEventData(EventSystem.current);
@@ -31,7 +37,7 @@ namespace Assets.Scripts.InputSystem
                 {
                     OnGameObjectSelected?.Invoke(go.gameObject);
 
-                    if (go.gameObject.TryGetComponent<ISceneObject>(out ISceneObject sceneObject))
+                    if (go.gameObject.TryGetComponent(out ISceneObject sceneObject))
                     {
                         OnISceneObjectSelected?.Invoke(sceneObject);
                     }
@@ -39,6 +45,8 @@ namespace Assets.Scripts.InputSystem
                     if (go.gameObject.GetComponentInParent<TopologyObject>())
                     {
                         OnTopologyObjectSelected?.Invoke(go.gameObject.GetComponentInParent<TopologyObject>());
+
+                        SelectedTopologyObject = go.gameObject.GetComponentInParent<TopologyObject>();
                     }
                 }
             }

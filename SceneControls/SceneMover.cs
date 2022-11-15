@@ -1,23 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Controls
 {
-    public class SceneMover : MonoBehaviour
+    [Serializable] public class SceneMover
     {
-        [SerializeField] private Transform scene;
+        private Transform scene;
 
         [SerializeField] private float coeff;
 
         private Vector3 newPosition;
 
-        private void Start()
+        internal void Initialize(Transform scene)
         {
+            this.scene = scene;
+
             newPosition = scene.position;
         }
 
-        private void Update()
+        internal void Update()
         {
             if (Input.GetKey(KeyCode.D))
             {

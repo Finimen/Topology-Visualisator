@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.Topology;
 using Assets.Scripts.Controls;
+using Zenject;
 
 namespace Assets.Scripts
 {
@@ -29,7 +30,7 @@ namespace Assets.Scripts
         [SerializeField] private VariableContainer variablePrefab;
         [SerializeField] private MethodContainer methodPrefab;
 
-        [SerializeField] private SceneMover sceneMover;
+        [Inject] private SceneController sceneController;
 
         [SerializeField] private float offestY;
 
@@ -54,7 +55,7 @@ namespace Assets.Scripts
                 selectedText.text = "Selected interface:";
             }
 
-            sceneMover.enabled = true;
+            sceneController.enabled = true;
 
             variablesPosition.gameObject.SetActive(true);
             methodsPosition.gameObject.SetActive(true);
@@ -87,7 +88,7 @@ namespace Assets.Scripts
                 gameObject.SetActive(false);
             }
 
-            sceneMover.enabled = true;
+            sceneController.enabled = true;
         }
 
         public void Delete()
