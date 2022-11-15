@@ -1,15 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class FollowTarget : MonoBehaviour
     {
-        public Transform Target;
+        [SerializeField] private Transform target;
 
         private Vector3 offest;
+
+        public Transform Target
+        {
+            set
+            {
+                if (value)
+                {
+                    target = value;
+                }
+            }
+            get
+            {
+                return target;
+            }
+        }
 
         private void Start()
         {

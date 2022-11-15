@@ -1,5 +1,7 @@
+using Assets.Scripts.InputSystem;
 using Assets.Scripts.Topology;
 using UnityEngine;
+using Zenject;
 
 namespace Assets.Scripts
 {
@@ -8,6 +10,8 @@ namespace Assets.Scripts
         [SerializeField] private Class classPrefab;
         [SerializeField] private Interface interfacePrefab;
         [SerializeField] private Transform sceneCanvas;
+
+        [Inject] private InputServise inputServise;
 
         private ObjectsLibary objectsLibary;
 
@@ -24,16 +28,24 @@ namespace Assets.Scripts
 
         public void CreateClass()
         {
+            inputServise.gameObject.SetActive(true);
+
             Class newClass = Instantiate(classPrefab, sceneCanvas.transform);
 
             newClass.transform.position = new Vector3(cameraMain.transform.position.x + Random.Range(-5,5),cameraMain.transform.position.y + Random.Range(-5, 5), 10);
+
+            newClass.GetComponent<MoveableObject>().Setup(inputServise);
 
             objectsLibary.Add(newClass);
         }
 
         public void CreateInterface()
         {
+            Interface newClass = Instantiate(interfacePrefab, sceneCanvas.transform);
 
+            newClass.transform.position = new Vector3(cameraMain.transform.position.x + Random.Range(-5, 5), cameraMain.transform.position.y + Random.Range(-5, 5), 10);
+
+            objectsLibary.Add(newClass);
         }
     }
 }

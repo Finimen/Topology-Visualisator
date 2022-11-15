@@ -1,55 +1,54 @@
+using Assets.Scripts.InputSystem;
 using Assets.Scripts.Topology;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using Zenject;
 
 namespace Assets.Scripts
 {
+    [RequireComponent(typeof(TopologyObject))]
     public class MoveableObject : MonoBehaviour
     {
-        private ObjectSelector selector;
+        [Inject] private Camera cameraMain;
 
-        private Camera cameraMain;
+        private InputServise inputServise;
+
+        private TopologyObject current;
 
         private Vector3 offest;
 
         private bool movingStarted;
 
-        private void Awake()
+        private void OnDisable()
         {
-            cameraMain = FindObjectOfType<Camera>();
+            inputServise.OnTopologyObjectSelected -= Select;
+        }
 
-            selector = FindObjectOfType<ObjectSelector>();
+        public void Setup(InputServise inputServise)
+        {
+            current = GetComponent<TopologyObject>();
+
+            this.inputServise = inputServise;
+
+            inputServise.OnTopologyObjectSelected += Select;
+        }
+
+        private void Select(TopologyObject objectSelected)
+        {
+            if (movingStarted)
+            {
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Mouse0) && objectSelected == current)
+            {
+                movingStarted = true;
+
+                offest = Input.mousePosition - transform.position;
+            }
         }
 
         private void Update()
         {
-            if (!movingStarted && Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                PointerEventData pointer = new PointerEventData(EventSystem.current);
-                pointer.position = Input.mousePosition;
-
-                List<RaycastResult> raycastResults = new List<RaycastResult>();
-
-                EventSystem.current.RaycastAll(pointer, raycastResults);
-
-                if (raycastResults.Count > 0)
-                {
-                    foreach (var gameObject in raycastResults)
-                    {
-                        if (gameObject.gameObject.GetComponentInParent<MoveableObject>() == this)
-                        {
-                            selector.selectedObject = gameObject.gameObject.GetComponentInParent<TopologyObject>();
-
-                            movingStarted = true;
-
-                            offest = Input.mousePosition - transform.position;
-                        }
-                    }
-                }
-            }
-
             if (movingStarted)
             {
                 Move(Input.mousePosition);
@@ -64,6 +63,11 @@ namespace Assets.Scripts
         private void Move(Vector3 currentMousePosition)
         {
             transform.position = currentMousePosition - offest;
+
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                transform.position =  new Vector3((int)(currentMousePosition.x - offest.x), (int)(currentMousePosition.y - offest.y), (int)(currentMousePosition.z - offest.z));
+            }
         }
     }
 }

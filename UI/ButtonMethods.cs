@@ -6,7 +6,7 @@ namespace Assets.Scripts
     {
         public void SetActive()
         {
-
+            throw new System.Exception();
         }
     }
 }

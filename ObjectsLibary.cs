@@ -1,7 +1,5 @@
 using Assets.Scripts.Topology;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets.Scripts
 {
