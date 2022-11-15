@@ -55,8 +55,6 @@ namespace Assets.Scripts
 
                 editMenu.transform.position = Input.mousePosition;
 
-                FindObjectOfType<ObjectSelector>().selectedObject = objectSelected.gameObject.GetComponentInParent<TopologyObject>();
-
                 UnityEngine.Debug.Log("HAPPY_:D");
 
                 return;

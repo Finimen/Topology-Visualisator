@@ -1,8 +1,10 @@
+using Assets.Scripts.InputSystem;
 using Assets.Scripts.Topology;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zenject;
 
 namespace Assets.Scripts
 {
@@ -11,22 +13,47 @@ namespace Assets.Scripts
         [SerializeField] private Transition transitionPrefab;
         [SerializeField] private Transform canvas;
 
-        private Transition transition;
+        [Inject] private InputServise inputServise;
 
-        private ObjectSelector objectSelector;
+        private Transition transition;
 
         public void CreateTransition()
         {
-            transition =  Instantiate(transitionPrefab, canvas);
+            transition = Instantiate(transitionPrefab, canvas);
 
             transition.StartPosition.position = Input.mousePosition;
-
-            transition.StartPosition = objectSelector.selectedObject.transform;
         }
 
-        private void Start()
+        private void Select(TopologyObject objectSelected)
         {
-            objectSelector = FindObjectOfType<ObjectSelector>();
+            if (!Input.GetMouseButtonDown(0) || !transition)
+            {
+                return;
+            }
+
+            if (objectSelected.GetComponentInParent<Interface>())
+            {
+                transition.SetColor(new Color(.01f, .01f, .85f));
+            }
+
+            if (objectSelected.GetComponentInParent<Class>())
+            {
+                transition.SetColor(new Color(.01f, .85f, .01f));
+            }
+
+            transition.Spawn();
+
+            transition = null;
+        }
+
+        private void OnEnable()
+        {
+            inputServise.OnTopologyObjectSelected += Select;
+        }
+
+        private void OnDisable()
+        {
+            inputServise.OnTopologyObjectSelected -= Select;
         }
 
         private void Update()
@@ -34,43 +61,6 @@ namespace Assets.Scripts
             if (transition)
             {
                 transition.EndPosition.position = Input.mousePosition;
-
-                if(Input.GetMouseButtonDown(0))
-                {
-                    PointerEventData pointer = new PointerEventData(EventSystem.current);
-                    pointer.position = Input.mousePosition;
-
-                    List<RaycastResult> raycastResults = new List<RaycastResult>();
-
-                    EventSystem.current.RaycastAll(pointer, raycastResults);
-
-                    if (raycastResults.Count > 0)
-                    {
-                        foreach (var go in raycastResults)
-                        {
-                            if (go.gameObject.GetComponentInParent<TopologyObject>())
-                            {
-                                transition.EndPosition = go.gameObject.GetComponentInParent<TopologyObject>().transform;
-
-                                if(go.gameObject.GetComponentInParent<Interface>())
-                                {
-                                    transition.SetColor(new Color(.01f,.01f,.85f));
-                                }
-
-                                if (go.gameObject.GetComponentInParent<Class>())
-                                {
-                                    transition.SetColor(new Color(.01f, .85f, .01f));
-                                }
-
-                                transition.Spawn();
-
-                                transition = null;
-
-                                break;
-                            }
-                        }
-                    }
-                }
             }
         }
     }
