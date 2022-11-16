@@ -38,13 +38,13 @@ namespace Assets.Scripts.Topology
  
         public Color BlackgroundColor
         {
-            set
-            {
-                blackgroundColor = value;
-            }
             get
             {
                 return blackgroundColor;
+            }
+            set
+            {
+                blackgroundColor = value;
             }
         }
 
@@ -71,6 +71,16 @@ namespace Assets.Scripts.Topology
         public void AddMethod(Method method)
         {
             methods.Add(method);
+        }
+
+        public void Destroy()
+        {
+            Destroy(gameObject);
+        }
+
+        public void SetScale(float scale)
+        {
+            transform.localScale = Vector3.one * scale;
         }
 
         public abstract void SelectStateVariables();

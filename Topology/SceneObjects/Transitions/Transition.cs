@@ -44,15 +44,32 @@ namespace Assets.Scripts.Topology
             }
         }
 
-        public void SetColor(Color newColor)
+        public Color BlackgroundColor
         {
-            width.color = newColor;
-            height.color = newColor;
+            get
+            {
+                return width.color;
+            }
+            set
+            {
+                width.color = value;
+                height.color = value;
+            }
         }
 
         public void Spawn()
         {
             isSpawned = true;
+        }
+
+        public void Destroy()
+        {
+            Destroy(gameObject);
+        }
+
+        public void SetScale(float scale)
+        {
+            scaleCoeff = (float)scale / 10;
         }
 
         private void Start()

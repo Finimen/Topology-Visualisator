@@ -1,17 +1,16 @@
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.Topology;
 using Assets.Scripts.Controls;
 using Zenject;
+using Assets.Scripts.InputSystem;
+using UnityEditor.Rendering;
 
 namespace Assets.Scripts
 {
     public class EditPanel : MonoBehaviour
     {
-        public TopologyObject SelectedObject;
-
         [SerializeField] private Text selectedText;
         [SerializeField] private Text scaleText;
 
@@ -30,37 +29,64 @@ namespace Assets.Scripts
         [SerializeField] private VariableContainer variablePrefab;
         [SerializeField] private MethodContainer methodPrefab;
 
-        [Inject] private SceneController sceneController;
-
         [SerializeField] private float offestY;
+
+        [Inject] private SceneController sceneController;
+        [Inject] private InputServise inputServise;
+        [Inject] private G_CUIColorPicker colorPicker;
 
         private List<VariableContainer> spawnedVariableContainers = new List<VariableContainer>();
         private List<MethodContainer> spawnedMethodContainers = new List<MethodContainer>();
 
+        private ISceneObject selectedSceneObject;
+
         private bool variablesIsActive;
         private bool methodsIsActive;
 
-        private bool startRenaming;
-
-        public void Select()
+        public void Select(Transform selected)
         {
-            field.text = SelectedObject.Name;
+            field.text = inputServise.SelectedTopologyObject.Name;
 
-            if (SelectedObject.GetComponent<Class>() != null)
+            if (!selected.TryGetComponent(out ISceneObject sceneObject))
+            {
+                return;
+            }
+
+            selectedSceneObject = sceneObject;
+
+            if (selected.GetComponentInParent<Transition>() != null)
+            {
+                selectedText.text = "Selected transition:";
+
+                field.gameObject.SetActive(false);
+
+                otherSettings.transform.position = new Vector3(otherSettings.transform.position.x, selectedText.transform.position.y - offestY, otherSettings.transform.position.z);
+
+                otherSettings.Target = selectedText.transform;
+
+                variablesPosition.gameObject.SetActive(false);
+                methodsPosition.gameObject.SetActive(false);
+            }
+            else if (selected.GetComponent<Class>() != null)
             {
                 selectedText.text = "Selected class:";
+
+                field.gameObject.SetActive(true);
+
+                variablesPosition.gameObject.SetActive(true);
+                methodsPosition.gameObject.SetActive(true);
             }
-            else if (SelectedObject.GetComponent<Interface>() != null)
+            else if (selected.GetComponent<Interface>() != null)
             {
                 selectedText.text = "Selected interface:";
+
+                variablesPosition.gameObject.SetActive(true);
+                methodsPosition.gameObject.SetActive(true);
             }
 
             sceneController.enabled = true;
 
-            variablesPosition.gameObject.SetActive(true);
-            methodsPosition.gameObject.SetActive(true);
-
-            scaleSlider.value = SelectedObject.transform.localScale.x;
+            scaleSlider.value = selected.transform.localScale.x;
 
             foreach(GameObject gameObject in objectSettings)
             {
@@ -72,10 +98,11 @@ namespace Assets.Scripts
             SelectStateMethods();
             SelectStateMethods();
 
-            FindObjectOfType<G_CUIColorPicker>().Color = SelectedObject.BlackgroundColor;
+            colorPicker.Color = sceneObject.BlackgroundColor;
+            colorPicker.SetSelectedObject(sceneObject);
         }
 
-        public void DeSelect()
+        private void DeSelect()
         {
             selectedText.text = "Nothing selected";
             field.text = "";
@@ -93,25 +120,22 @@ namespace Assets.Scripts
 
         public void Delete()
         {
-            if (SelectedObject)
-            {
-                Destroy(SelectedObject.gameObject);
-            }
+            selectedSceneObject.Destroy();
         }
 
         public void Rename(string name)
         {
-            SelectedObject.Rename(name);
+            inputServise.SelectedTopologyObject.Rename(name);
         }
 
         public void AddVariable(Variable variable)
         {
-            SelectedObject.AddVariable(variable);
+            inputServise.SelectedTopologyObject.AddVariable(variable);
         }
 
         public void AddMethod(Method method)
         {
-            SelectedObject.AddMethod(method);
+            inputServise.SelectedTopologyObject.AddMethod(method);
         }
 
         public void SelectStateVariables()
@@ -120,7 +144,7 @@ namespace Assets.Scripts
 
             if (variablesIsActive)
             {
-                foreach (var variableData in SelectedObject.Variables)
+                foreach (var variableData in inputServise.SelectedTopologyObject.Variables)
                 {
                     VariableContainer variableUI = Instantiate(variablePrefab, transform);
 
@@ -136,7 +160,7 @@ namespace Assets.Scripts
 
                 addVariableButton.gameObject.SetActive(true);
 
-                if (SelectedObject.Variables.Count > 0)
+                if (inputServise.SelectedTopologyObject.Variables.Count > 0)
                 {
                     addVariableButton.transform.position = new Vector3(spawnedVariableContainers[spawnedVariableContainers.Count - 1].transform.position.x, spawnedVariableContainers[spawnedVariableContainers.Count - 1].transform.position.y - offestY
                         * (spawnedVariableContainers.Count), spawnedVariableContainers[spawnedVariableContainers.Count - 1].transform.position.z);
@@ -171,7 +195,7 @@ namespace Assets.Scripts
         {
             scaleText.text = "Scale: " + scale;
 
-            SelectedObject.transform.localScale = Vector3.one * scale;
+            selectedSceneObject.SetScale(scale);
         }
 
         public void SelectStateMethods()
@@ -180,7 +204,7 @@ namespace Assets.Scripts
 
             if (methodsIsActive)
             {
-                foreach (var methodData in SelectedObject.Methods)
+                foreach (var methodData in inputServise.SelectedTopologyObject.Methods)
                 {
                     MethodContainer methodUI = Instantiate(methodPrefab, transform);
 
@@ -196,7 +220,7 @@ namespace Assets.Scripts
 
                 addMethodButton.gameObject.SetActive(true);
 
-                if (SelectedObject.Methods.Count > 0)
+                if (inputServise.SelectedTopologyObject.Methods.Count > 0)
                 {
                     addMethodButton.transform.position = new Vector3(spawnedMethodContainers[spawnedMethodContainers.Count - 1].transform.position.x, spawnedMethodContainers[spawnedMethodContainers.Count - 1].transform.position.y - offestY
                         * (spawnedMethodContainers.Count), spawnedMethodContainers[spawnedMethodContainers.Count - 1].transform.position.z);
@@ -236,6 +260,16 @@ namespace Assets.Scripts
             }
         }
 
+        private void OnEnable()
+        {
+            //inputServise.OnVoidSelected += DeSelect;
+        }
+
+        private void OnDisable()
+        {
+            //inputServise.OnVoidSelected -= DeSelect;
+        }
+
         private void Start()
         {
             variablesPosition.gameObject.SetActive(false);
@@ -249,18 +283,23 @@ namespace Assets.Scripts
 
         private void Update()
         {
-            if (!SelectedObject)
+            if (selectedSceneObject == null)
             {
                 return;
             }
 
-            if (SelectedObject.VariablesUnchanged())
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                Delete();
+            }
+
+            if (inputServise.SelectedTopologyObject.VariablesUnchanged())
             {
                 SelectStateVariables();
                 SelectStateVariables();
             }
 
-            if (SelectedObject.MethodsUnchanged())
+            if (inputServise.SelectedTopologyObject.MethodsUnchanged())
             {
                 SelectStateMethods();
                 SelectStateMethods();

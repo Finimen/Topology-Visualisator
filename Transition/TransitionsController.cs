@@ -35,12 +35,12 @@ namespace Assets.Scripts
 
             if (objectSelected.GetComponentInParent<Interface>())
             {
-                transition.SetColor(new Color(.01f, .01f, .85f));
+                transition.BlackgroundColor = (new Color(.01f, .01f, .85f));
             }
 
             if (objectSelected.GetComponentInParent<Class>())
             {
-                transition.SetColor(new Color(.01f, .85f, .01f));
+                transition.BlackgroundColor = (new Color(.01f, .85f, .01f));
             }
 
             transition.Spawn();

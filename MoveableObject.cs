@@ -2,12 +2,15 @@ using Assets.Scripts.InputSystem;
 using Assets.Scripts.Topology;
 using UnityEngine;
 using Zenject;
+using System;
 
 namespace Assets.Scripts
 {
     [RequireComponent(typeof(TopologyObject))]
     public class MoveableObject : MonoBehaviour
     {
+        public Action OnMove;
+
         [Inject] private Camera cameraMain;
 
         private InputServise inputServise;
@@ -66,6 +69,8 @@ namespace Assets.Scripts
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
+                OnMove?.Invoke();
+
                 transform.position =  new Vector3((int)(currentMousePosition.x - offest.x), (int)(currentMousePosition.y - offest.y), (int)(currentMousePosition.z - offest.z));
             }
         }

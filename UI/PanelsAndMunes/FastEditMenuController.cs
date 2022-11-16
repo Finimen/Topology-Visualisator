@@ -30,26 +30,34 @@ namespace Assets.Scripts
 
         private void OnEnable()
         {
-            inputServise.OnGameObjectSelected += SelectAction;
+            inputServise.OnGameObjectSelected += Select;
         }
 
         private void OnDisable()
         {
-            inputServise.OnGameObjectSelected -= SelectAction;
+            inputServise.OnGameObjectSelected -= Select;
         }
 
-        private void SelectAction(GameObject objectSelected)
+        private void Select(GameObject objectSelected)
         {
-            if(!Input.GetKeyDown(KeyCode.Mouse1)) 
+            if(!Input.GetKeyDown(KeyCode.Mouse1) && !Input.GetKeyDown(KeyCode.Mouse0))
             {
                 return;
             }
 
-            if (objectSelected.gameObject.GetComponentInParent<TopologyObject>())
+            if (Input.GetKeyDown(KeyCode.Mouse0) && objectSelected.GetComponentInParent<Transition>())
             {
-                editPanel.SelectedObject = objectSelected.gameObject.GetComponentInParent<TopologyObject>();
+                editPanel.Select(objectSelected.GetComponentInParent<Transition>().transform);
 
-                editPanel.Select();
+                UnityEngine.Debug.Log("Transition");
+            }
+            else if (Input.GetKeyDown(KeyCode.Mouse0) && objectSelected.GetComponentInParent<TopologyObject>())
+            {
+                editPanel.Select(objectSelected.GetComponentInParent<TopologyObject>().transform);
+            }
+            else if (Input.GetKeyDown(KeyCode.Mouse1) && objectSelected.GetComponentInParent<TopologyObject>())
+            {
+                editPanel.Select(objectSelected.GetComponentInParent<TopologyObject>().transform);
 
                 editMenu.gameObject.SetActive(true);
 
@@ -59,11 +67,11 @@ namespace Assets.Scripts
 
                 return;
             }
-            else if (objectSelected.gameObject.GetComponentInParent<FastEditMenu>() || objectSelected.gameObject.GetComponentInParent<EditPanel>())
+            else if (objectSelected.GetComponentInParent<FastEditMenu>() || objectSelected.GetComponentInParent<EditPanel>())
             {
                 return;
             }
-            else if (objectSelected.gameObject.GetComponentInParent<AddWindow>())
+            else if (objectSelected.GetComponentInParent<AddWindow>())
             {
                 return;
             }

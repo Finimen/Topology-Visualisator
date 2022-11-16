@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.Topology;
 using System;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,6 +12,8 @@ namespace Assets.Scripts.InputSystem
         public Action<TopologyObject> OnTopologyObjectSelected;
         public Action<GameObject> OnGameObjectSelected;
 
+        public Action OnVoidSelected;
+
         [SerializeField] private KeyCode mouse0;
         [SerializeField] private KeyCode mouse1;
 
@@ -20,6 +21,12 @@ namespace Assets.Scripts.InputSystem
         {
             get;
             private set; 
+        }
+
+        public GameObject SelectedGameObject
+        {
+            get;
+            private set;
         }
 
         private void Update()
@@ -47,6 +54,12 @@ namespace Assets.Scripts.InputSystem
                         OnTopologyObjectSelected?.Invoke(go.gameObject.GetComponentInParent<TopologyObject>());
 
                         SelectedTopologyObject = go.gameObject.GetComponentInParent<TopologyObject>();
+                    }
+                    else if (Input.GetMouseButton(0) && SelectedTopologyObject)
+                    {
+                        UnityEngine.Debug.Log("ECS");
+
+                        OnVoidSelected?.Invoke();
                     }
                 }
             }
