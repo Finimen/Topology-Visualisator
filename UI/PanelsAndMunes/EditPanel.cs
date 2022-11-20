@@ -5,7 +5,6 @@ using Assets.Scripts.Topology;
 using Assets.Scripts.Controls;
 using Zenject;
 using Assets.Scripts.InputSystem;
-using UnityEditor.Rendering;
 
 namespace Assets.Scripts
 {
@@ -67,7 +66,7 @@ namespace Assets.Scripts
                 variablesPosition.gameObject.SetActive(false);
                 methodsPosition.gameObject.SetActive(false);
             }
-            else if (selected.GetComponent<Class>() != null)
+            else if (sceneObject is Class)
             {
                 selectedText.text = "Selected class:";
 
@@ -76,7 +75,7 @@ namespace Assets.Scripts
                 variablesPosition.gameObject.SetActive(true);
                 methodsPosition.gameObject.SetActive(true);
             }
-            else if (selected.GetComponent<Interface>() != null)
+            else if (sceneObject is Interface)
             {
                 selectedText.text = "Selected interface:";
 
@@ -100,22 +99,6 @@ namespace Assets.Scripts
 
             colorPicker.Color = sceneObject.BlackgroundColor;
             colorPicker.SetSelectedObject(sceneObject);
-        }
-
-        private void DeSelect()
-        {
-            selectedText.text = "Nothing selected";
-            field.text = "";
-
-            variablesPosition.gameObject.SetActive(false);
-            methodsPosition.gameObject.SetActive(false);
-
-            foreach (GameObject gameObject in objectSettings)
-            {
-                gameObject.SetActive(false);
-            }
-
-            sceneController.enabled = true;
         }
 
         public void Delete()
@@ -164,7 +147,7 @@ namespace Assets.Scripts
                 {
                     addVariableButton.transform.position = new Vector3(spawnedVariableContainers[spawnedVariableContainers.Count - 1].transform.position.x, spawnedVariableContainers[spawnedVariableContainers.Count - 1].transform.position.y - offestY
                         * (spawnedVariableContainers.Count), spawnedVariableContainers[spawnedVariableContainers.Count - 1].transform.position.z);
-                
+
                     addVariableButton.Target = spawnedVariableContainers[spawnedVariableContainers.Count - 1].transform;
                 }
                 else
@@ -258,6 +241,22 @@ namespace Assets.Scripts
 
                 otherSettings.Target = methodsPosition;
             }
+        }
+
+        private void DeSelect()
+        {
+            selectedText.text = "Nothing selected";
+            field.text = "";
+
+            variablesPosition.gameObject.SetActive(false);
+            methodsPosition.gameObject.SetActive(false);
+
+            foreach (GameObject gameObject in objectSettings)
+            {
+                gameObject.SetActive(false);
+            }
+
+            sceneController.enabled = true;
         }
 
         private void OnEnable()

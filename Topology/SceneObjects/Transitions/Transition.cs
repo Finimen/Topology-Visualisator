@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.Topology
 {
+    using Debug = UnityEngine.Debug;
+
     public class Transition : MonoBehaviour, ISceneObject
     {
         [SerializeField] private Image width;
@@ -12,6 +14,9 @@ namespace Assets.Scripts.Topology
 
         [SerializeField] private Transform startPosition;
         [SerializeField] private Transform endPosition;
+
+        private ISceneObject startObject;
+        private ISceneObject endObject;
 
         private TransitionMode mode;
 
@@ -29,6 +34,11 @@ namespace Assets.Scripts.Topology
             set
             {
                 startPosition = value;
+
+                if(TryGetComponent(out ISceneObject sceneObject))
+                {
+                    startObject = sceneObject;
+                }
             }
         }
 
@@ -41,6 +51,11 @@ namespace Assets.Scripts.Topology
             set
             {
                 endPosition = value;
+
+                if (TryGetComponent(out ISceneObject sceneObject))
+                {
+                    endObject = sceneObject;
+                }
             }
         }
 
@@ -60,6 +75,15 @@ namespace Assets.Scripts.Topology
         public void Spawn()
         {
             isSpawned = true;
+
+            if(endObject is Interface || startObject is Interface)
+            {
+                Debug.Log("BlueColor");
+            }
+            else if (endObject is Class && startObject is Class)
+            {
+                Debug.Log("GreenColor");
+            }
         }
 
         public void Destroy()
@@ -97,7 +121,12 @@ namespace Assets.Scripts.Topology
                     break;
             }
 
-            if(!isSpawned && Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.Escape))
+            if(isSpawned)
+            {
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Mouse1))
             {
                 Destroy(gameObject);
             }

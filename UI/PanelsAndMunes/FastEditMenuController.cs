@@ -18,7 +18,7 @@ namespace Assets.Scripts
 
         public void Close()
         {
-            menuOpened = false;
+            menuOpened = false; 
 
             editMenu.gameObject.SetActive(false);
         }

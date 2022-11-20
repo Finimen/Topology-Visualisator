@@ -51,6 +51,8 @@ namespace Assets.Scripts.Topology
 
         public void SelectStateVariables(bool state)
         {
+            float currentOffest = offest * transform.localScale.x;
+
             if (variables.Count == 0)
             {
                 UnityEngine.Debug.Log("VariablesIsEmpty");
@@ -64,7 +66,7 @@ namespace Assets.Scripts.Topology
                 {
                     VariableContainer variableUI = Instantiate(variablePrefab, transform);
 
-                    variableUI.transform.position = new Vector3(variablesPosition.position.x, variablesPosition.position.y - offestY
+                    variableUI.transform.position = new Vector3(variablesPosition.position.x, variablesPosition.position.y - currentOffest
                         * (spawnedVariableContainers.Count + 1), variablesPosition.position.z);
 
                     variableUI.transform.rotation = transform.rotation;
@@ -91,6 +93,8 @@ namespace Assets.Scripts.Topology
 
         public override void SelectStateMethods()
         {
+            float currentOffest = offest * transform.localScale.x;
+
             if (methods.Count == 0)
             {
                 UnityEngine.Debug.Log("MethodsIsEmpty");
@@ -106,7 +110,7 @@ namespace Assets.Scripts.Topology
                 {
                     MethodContainer methodUI = Instantiate(methodPrefab, transform);
 
-                    methodUI.transform.position = new Vector3(methodsPosition.position.x, methodsPosition.position.y - offestY
+                    methodUI.transform.position = new Vector3(methodsPosition.position.x, methodsPosition.position.y - currentOffest
                         * (spawnedMethodContainers.Count + 1), methodsPosition.position.z);
 
                     methodUI.transform.rotation = transform.rotation;

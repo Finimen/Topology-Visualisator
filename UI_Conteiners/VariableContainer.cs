@@ -1,9 +1,10 @@
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 namespace Assets.Scripts
 {
-    public class VariableContainer : Container
+    [Serializable] public class VariableContainer : Container
     {
         
     }

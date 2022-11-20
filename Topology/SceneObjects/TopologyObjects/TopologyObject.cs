@@ -8,21 +8,21 @@ namespace Assets.Scripts.Topology
     {
         [SerializeField] protected Transform variablesPosition;
         [SerializeField] protected Transform methodsPosition;
-
-        [SerializeField] protected float offestY;
-
+                         
         [SerializeField] protected Image blackgroundImage;
-
+                         
         [SerializeField] protected Text typeText;
         [SerializeField] protected Text nameText;
+                         
+        [SerializeField] protected Color blackgroundColor;
+                         
+        [SerializeField] protected List<Variable> variables;
+                         
+        [SerializeField] protected List<Method> methods;
 
         [SerializeField] protected new string name;
 
-        [SerializeField] protected Color blackgroundColor;
-
-        [SerializeField] protected List<Variable> variables;
-
-        [SerializeField] protected List<Method> methods;
+        [SerializeField] protected float offest;
 
         public abstract List<Variable> Variables
         { 
@@ -35,7 +35,7 @@ namespace Assets.Scripts.Topology
             get;
             set;
         }
- 
+
         public Color BlackgroundColor
         {
             get

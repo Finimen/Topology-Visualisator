@@ -1,7 +1,6 @@
 using Assets.Scripts.InputSystem;
 using Assets.Scripts.Topology;
 using UnityEngine;
-using Zenject;
 using System;
 
 namespace Assets.Scripts
@@ -11,19 +10,19 @@ namespace Assets.Scripts
     {
         public Action OnMove;
 
-        [Inject] private Camera cameraMain;
-
         private InputServise inputServise;
 
         private TopologyObject current;
+
+        private Camera cameraMain;
 
         private Vector3 offest;
 
         private bool movingStarted;
 
-        private void OnDisable()
+        public void Initialize(Camera camera)
         {
-            inputServise.OnTopologyObjectSelected -= Select;
+            cameraMain = camera;
         }
 
         public void Setup(InputServise inputServise)
@@ -33,6 +32,11 @@ namespace Assets.Scripts
             this.inputServise = inputServise;
 
             inputServise.OnTopologyObjectSelected += Select;
+        }
+
+        private void OnDisable()
+        {
+            inputServise.OnTopologyObjectSelected -= Select;
         }
 
         private void Select(TopologyObject objectSelected)

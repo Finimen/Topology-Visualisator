@@ -11,11 +11,14 @@ namespace Assets.Scripts.Debug
 
         [SerializeField] private Transform canvasTransform;
 
-        private void Start()
+        private void Update()
         {
-            for(int i = 0; i < spawnCount; i++)
+            if (Input.GetKeyDown(KeyCode.T))
             {
-                Instantiate(topologyObject, canvasTransform);
+                for (int i = 0; i < spawnCount; i++)
+                {
+                    Instantiate(topologyObject, canvasTransform);
+                }
             }
         }
     }
