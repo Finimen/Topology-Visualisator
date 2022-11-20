@@ -79,6 +79,8 @@ namespace Assets.Scripts
             {
                 selectedText.text = "Selected interface:";
 
+                field.gameObject.SetActive(true);
+
                 variablesPosition.gameObject.SetActive(true);
                 methodsPosition.gameObject.SetActive(true);
             }

@@ -59,8 +59,6 @@ namespace Assets.Scripts.Topology
         public void Rename(string name)
         {
             this.name = name;
-
-            UnityEngine.Debug.Log(";D");
         }
 
         public void AddVariable(Variable variable)
@@ -75,7 +73,10 @@ namespace Assets.Scripts.Topology
 
         public void Destroy()
         {
-            Destroy(gameObject);
+            if (gameObject)
+            {
+                Destroy(gameObject);
+            }
         }
 
         public void SetScale(float scale)

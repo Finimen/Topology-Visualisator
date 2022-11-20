@@ -6,7 +6,7 @@ namespace Assets.Scripts.Topology
 {
     [ExecuteAlways] 
     [Serializable]
-    public class Class : TopologyObject, ISaveProvider
+    public class Class : TopologyObject
     {
         [Header("Prefabs")]
         [SerializeField] private VariableContainer variablePrefab;
@@ -20,32 +20,6 @@ namespace Assets.Scripts.Topology
 
         private List<VariableContainer> spawnedVariableContainers = new List<VariableContainer>();
         private List<MethodContainer> spawnedMethodContainers = new List<MethodContainer>();
-
-        List<VariableContainer> ISaveProvider.Variables
-        {
-            get
-            {
-                return spawnedVariableContainers;
-            }
-
-            set
-            {
-                spawnedVariableContainers = value;
-            }
-        }
-
-        List<MethodContainer> ISaveProvider.Methods
-        {
-            get
-            {
-                return spawnedMethodContainers;
-            }
-
-            set
-            {
-                spawnedMethodContainers = value;
-            }
-        }
 
         public override List<Variable> Variables
         {

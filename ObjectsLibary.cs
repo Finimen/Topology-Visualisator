@@ -4,17 +4,21 @@ namespace Assets.Scripts.Topology
 {
     public class ObjectsLibary
     {
-        private List<TopologyObject> topologyObjects;
-        private List<Transition> transitions;
         public List<Class> Classes;
         public List<Transition> Transitions;
+        public List<Interface> Interfaces;
+
+        private List<TopologyObject> topologyObjects;
+        private List<Transition> transitions;
 
         public void Initialize(int count)
         {
             topologyObjects = new List<TopologyObject>(count);
             transitions = new List<Transition>(count);
+
             Classes = new List<Class>(count);
             Transitions = new List<Transition>(count);
+            Interfaces = new List<Interface>(count);
         }
 
         public void Add(TopologyObject topologyObject)
@@ -24,6 +28,11 @@ namespace Assets.Scripts.Topology
             if(topologyObject is Class)
             {
                 Classes.Add((Class)topologyObject);
+            }
+
+            if(topologyObject is Interface)
+            {
+                Interfaces.Add((Interface)topologyObject);
             }
         }
 

@@ -24,6 +24,14 @@ namespace Assets.Scripts
 
         private Camera cameraMain;
 
+        public ObjectsLibary ObjectsLibary
+        {
+            get 
+            { 
+                return objectsLibary;
+            }
+        }
+
         public void Initialize(Camera camera)
         {
             objectsLibary = new ObjectsLibary();
@@ -95,32 +103,6 @@ namespace Assets.Scripts
             if (transition)
             {
                 transition.EndPosition.position = Input.mousePosition;
-            }
-
-            if (Input.GetKeyUp(KeyCode.Alpha1))
-            {
-                FindObjectOfType<SaveManager>().OnSave(objectsLibary.Classes, objectsLibary.Transitions);
-            }
-
-            if (Input.GetKeyUp(KeyCode.Alpha2))
-            {
-                foreach (Class @class in objectsLibary.Classes)
-                {
-                    if(@class != null)
-                    {
-                        Destroy(@class.gameObject);
-                    }
-                }
-
-                foreach (Transition transition in objectsLibary.Transitions)
-                {
-                    if (transition != null)
-                    {
-                        Destroy(transition.gameObject);
-                    }
-                }
-
-                FindObjectOfType<SaveManager>().OnLoad(objectsLibary.Classes, objectsLibary.Transitions);
             }
         }
     }

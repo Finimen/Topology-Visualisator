@@ -3,7 +3,6 @@ using Assets.Scripts.SaveSystem.Data;
 using Assets.Scripts.Topology;
 using System.Collections.Generic;
 using System.IO;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.Scripts.SaveSystem
@@ -11,6 +10,7 @@ namespace Assets.Scripts.SaveSystem
     internal class SaveManager : MonoBehaviour
     {
         [SerializeField] private Class classPrefab;
+        [SerializeField] private Interface interfacePrefab;
         [SerializeField] private Transition transitionPrefab;
 
         [SerializeField] private Transform canvasObject;
@@ -19,6 +19,11 @@ namespace Assets.Scripts.SaveSystem
         [SerializeField] private string saveName;
 
         [SerializeField] private string[] saveFiles;
+
+        public void SetSaveName(string saveName)
+        {
+            this.saveName = saveName;
+        }
 
         public void GetLoadFiles()
         {
@@ -31,16 +36,17 @@ namespace Assets.Scripts.SaveSystem
         }
 
         [ContextMenu("Save")]
-        public void OnSave(List<Class> classes, List<Transition> transitions)
+        public void OnSave(List<Class> classes,List<Interface> interfaces, List<Transition> transitions)
         {
             SceneData sceneData = new SceneData();
 
-            List<ClassData> classData = new List<ClassData>();
+            List<TopologyObjetcData> classData = new List<TopologyObjetcData>();
+            List<TopologyObjetcData> interfaceData = new List<TopologyObjetcData>();
             List<TransitionData> transactionData = new List<TransitionData>();
 
             foreach (Class classToSave in classes)
             {
-                ClassData data = new ClassData()
+                TopologyObjetcData data = new TopologyObjetcData()
                 {
                     Methods = classToSave.Methods,
                     Name = classToSave.Name,
@@ -51,6 +57,21 @@ namespace Assets.Scripts.SaveSystem
                 };
 
                 classData.Add(data);
+            }
+
+            foreach (Interface interfaceToSave in interfaces)
+            {
+                TopologyObjetcData data = new TopologyObjetcData()
+                {
+                    Methods = interfaceToSave.Methods,
+                    Name = interfaceToSave.Name,
+                    Position = interfaceToSave.transform.position,
+                    Rotation = interfaceToSave.transform.rotation,
+                    Variables = interfaceToSave.Variables,
+                    BlackgroundColor = interfaceToSave.BlackgroundColor,
+                };
+
+                interfaceData.Add(data);
             }
 
             foreach (Transition transitionToSave in transitions)
@@ -74,20 +95,22 @@ namespace Assets.Scripts.SaveSystem
             }
 
             sceneData.ClassData = classData;
+            sceneData.InterfaceData = interfaceData;
             sceneData.TransactionData = transactionData;
 
             SerializationManager.Save(saveName, sceneData);
         }
 
         [ContextMenu("Load")]
-        public void OnLoad(List<Class> a, List<Transition> b)
+        public void OnLoad(List<Class> a, List<Interface> b, List<Transition> c)
         {
             List<Class> classes = new List<Class>();
+            List<Interface> interfaces = new List<Interface>();
             List<Transition> transitions = new List<Transition>();
 
             SceneData sceneData = (SceneData)SerializationManager.Load(Application.persistentDataPath + "/saves" + saveName + ".save");
 
-            foreach (ClassData data in sceneData.ClassData)
+            foreach (TopologyObjetcData data in sceneData.ClassData)
             {
                 Class classClone = Instantiate(classPrefab, canvasObject);
 
@@ -104,6 +127,25 @@ namespace Assets.Scripts.SaveSystem
                 classClone.GetComponent<MoveableObject>().Setup(FindObjectOfType<InputServise>());
 
                 classes.Add(classClone);
+            }
+
+            foreach (TopologyObjetcData data in sceneData.InterfaceData)
+            {
+                Interface interfaceClone = Instantiate(interfacePrefab, canvasObject);
+
+                interfaceClone.Rename(data.Name);
+
+                interfaceClone.transform.position = data.Position;
+                interfaceClone.transform.rotation = data.Rotation;
+
+                interfaceClone.Variables = data.Variables;
+                interfaceClone.Methods = data.Methods;
+
+                interfaceClone.BlackgroundColor = data.BlackgroundColor;
+
+                interfaceClone.GetComponent<MoveableObject>().Setup(FindObjectOfType<InputServise>());
+
+                interfaces.Add(interfaceClone);
             }
 
             try
@@ -129,7 +171,8 @@ namespace Assets.Scripts.SaveSystem
             }
 
             a = classes;
-            b = transitions;
+            b = interfaces;
+            c = transitions;
         }
     }
 }

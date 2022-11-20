@@ -18,8 +18,6 @@ namespace Assets.Scripts.SaveSystem
 
             string path = Application.persistentDataPath + "/saves" + saveName + ".save";
 
-            UnityEngine.Debug.Log(path);
-
             FileStream fileStream = File.Create(path);
 
             formatter.Serialize(fileStream, saveData);
@@ -31,8 +29,6 @@ namespace Assets.Scripts.SaveSystem
 
         public static object Load(string path)
         {
-            UnityEngine.Debug.Log(path);
-
             if (!File.Exists(path))
             {
                 throw new FileNotFoundException();
