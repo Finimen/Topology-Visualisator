@@ -47,6 +47,7 @@ namespace Assets.Scripts.SaveSystem
                     Position = classToSave.transform.position,
                     Rotation = classToSave.transform.rotation,
                     Variables = classToSave.Variables,
+                    BlackgroundColor = classToSave.BlackgroundColor,
                 };
 
                 classData.Add(data);
@@ -56,10 +57,18 @@ namespace Assets.Scripts.SaveSystem
             {
                 TransitionData data = new TransitionData()
                 {
-                    //StartPosition = transitionToSave.StartPosition,
-                    //EndPosition = transitionToSave.EndPosition,
                     BlackgroundColor = transitionToSave.BlackgroundColor,
                 };
+
+                try
+                {
+                    data.StartPosition = new TransformData(transitionToSave.StartPosition.position, transitionToSave.StartPosition.rotation, transitionToSave.transform.localScale);
+                    data.EndPosition = new TransformData(transitionToSave.EndPosition.position, transitionToSave.EndPosition.rotation, transitionToSave.transform.localScale);
+                }
+                catch
+                {
+                    UnityEngine.Debug.LogError("Erro setup TransformData");
+                }
 
                 transactionData.Add(data);
             }
@@ -90,20 +99,33 @@ namespace Assets.Scripts.SaveSystem
                 classClone.Variables = data.Variables;
                 classClone.Methods = data.Methods;
 
+                classClone.BlackgroundColor = data.BlackgroundColor;
+
                 classClone.GetComponent<MoveableObject>().Setup(FindObjectOfType<InputServise>());
 
                 classes.Add(classClone);
             }
 
-            foreach (TransitionData data in sceneData.TransactionData)
+            try
             {
-                Transition transitionClone = Instantiate(transitionPrefab, canvasTransition);
+                foreach (TransitionData data in sceneData.TransactionData)
+                {
+                    Transition transitionClone = Instantiate(transitionPrefab, canvasTransition);
 
-                //transitionClone.StartPosition = data.StartPosition;
-                //transitionClone.EndPosition = data.EndPosition;
-                transitionClone.BlackgroundColor = data.BlackgroundColor;
+                    transitionClone.StartPosition.position = data.StartPosition.Position;
+                    transitionClone.StartPosition.rotation = data.StartPosition.Rotation;
 
-                transitions.Add(transitionClone);
+                    transitionClone.EndPosition.position = data.EndPosition.Position;
+                    transitionClone.EndPosition.rotation = data.EndPosition.Rotation;
+
+                    transitionClone.BlackgroundColor = data.BlackgroundColor;
+
+                    transitions.Add(transitionClone);
+                }
+            }
+            catch
+            {
+                UnityEngine.Debug.LogError("Error load Transition");
             }
 
             a = classes;

@@ -13,6 +13,8 @@ namespace Assets.Scripts.SaveSystem.Data
         public Vector3 Position;
         public Quaternion Rotation;
 
+        public Color BlackgroundColor;
+
         [Space(20)]
         public string Name;
     }

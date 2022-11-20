@@ -5,8 +5,8 @@ namespace Assets.Scripts.SaveSystem.Data
 {
     [Serializable] internal class TransitionData
     {
-        public Transform StartPosition;
-        public Transform EndPosition;
+        public TransformData StartPosition;
+        public TransformData EndPosition;
         public Color BlackgroundColor;
     }
 }

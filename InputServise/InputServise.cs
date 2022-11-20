@@ -57,8 +57,6 @@ namespace Assets.Scripts.InputSystem
                     }
                     else if (Input.GetMouseButton(0) && SelectedTopologyObject)
                     {
-                        UnityEngine.Debug.Log("ECS");
-
                         OnVoidSelected?.Invoke();
                     }
                 }

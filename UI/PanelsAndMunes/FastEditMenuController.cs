@@ -63,8 +63,6 @@ namespace Assets.Scripts
 
                 editMenu.transform.position = Input.mousePosition;
 
-                UnityEngine.Debug.Log("HAPPY_:D");
-
                 return;
             }
             else if (objectSelected.GetComponentInParent<FastEditMenu>() || objectSelected.GetComponentInParent<EditPanel>())

@@ -1,6 +1,7 @@
 using Assets.Scripts.InputSystem;
 using Assets.Scripts.SaveSystem;
 using Assets.Scripts.Topology;
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -60,7 +61,7 @@ namespace Assets.Scripts
 
             transition.StartPosition.position = Input.mousePosition;
 
-            transition.StartPosition = inputServise.SelectedTopologyObject.transform;
+            transition.StartPosition = inputServise.SelectedTopologyObject.GetComponent<RectTransform>();
 
             objectsLibary.Add(transition);
         }
@@ -72,7 +73,7 @@ namespace Assets.Scripts
                 return;
             }
 
-            transition.EndPosition = objectSelected.transform;
+            transition.EndPosition = objectSelected.GetComponent<RectTransform>();
 
             transition.Spawn();
 

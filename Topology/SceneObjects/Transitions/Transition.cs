@@ -12,8 +12,8 @@ namespace Assets.Scripts.Topology
 
         [SerializeField, Range(0,.1f)] private float scaleCoeff;
 
-        [SerializeField] private Transform startPosition;
-        [SerializeField] private Transform endPosition;
+        [SerializeField] private RectTransform startPosition;
+        [SerializeField] private RectTransform endPosition;
 
         private ISceneObject startObject;
         private ISceneObject endObject;
@@ -25,7 +25,7 @@ namespace Assets.Scripts.Topology
 
         private bool isSpawned;
 
-        public Transform StartPosition 
+        public RectTransform StartPosition 
         {
             get
             {
@@ -42,7 +42,7 @@ namespace Assets.Scripts.Topology
             }
         }
 
-        public Transform EndPosition
+        public RectTransform EndPosition
         {
             get
             {

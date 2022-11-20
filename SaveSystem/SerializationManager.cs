@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -27,8 +26,6 @@ namespace Assets.Scripts.SaveSystem
 
             fileStream.Close();
 
-            //JsonConvert.SerializeObject()
-
             return true;
         }
 
@@ -53,7 +50,7 @@ namespace Assets.Scripts.SaveSystem
             }
             catch
             {
-                UnityEngine.Debug.LogErrorFormat ("Faild to load file at {0}", path);
+                UnityEngine.Debug.LogErrorFormat ("Failed to load file at {0}", path);
                 fileStream.Close();
                 throw new FileNotFoundException();
             }
@@ -67,11 +64,15 @@ namespace Assets.Scripts.SaveSystem
 
             Vector3SerializationSurrogate vector3Surrogate = new Vector3SerializationSurrogate();
             QuaternionSerializationSurrogate quaternionSurrogate = new QuaternionSerializationSurrogate();
-            ColorSerializationSurrogate colorSerializationSurrogate = new ColorSerializationSurrogate();
+            ColorSerializationSurrogate colorSurrogate = new ColorSerializationSurrogate();
+            TransformSerializationSurrogate transformSurrogate = new TransformSerializationSurrogate();
+            RectTransformSerializationSurrogate rectTransformSurrogate = new RectTransformSerializationSurrogate();
 
-            surrogateSelector.AddSurrogate(typeof(Vector3), new StreamingContext(StreamingContextStates.All), vector3Surrogate);
-            surrogateSelector.AddSurrogate(typeof(Quaternion), new StreamingContext(StreamingContextStates.All), quaternionSurrogate);
-            surrogateSelector.AddSurrogate(typeof(Color), new StreamingContext(StreamingContextStates.All), colorSerializationSurrogate);
+            surrogateSelector.AddSurrogate(typeof (Vector3), new StreamingContext(StreamingContextStates.All), vector3Surrogate);
+            surrogateSelector.AddSurrogate(typeof (Quaternion), new StreamingContext(StreamingContextStates.All), quaternionSurrogate);
+            surrogateSelector.AddSurrogate(typeof (Color), new StreamingContext(StreamingContextStates.All), colorSurrogate);
+            surrogateSelector.AddSurrogate(typeof (RectTransform), new StreamingContext(StreamingContextStates.All), rectTransformSurrogate);
+            //surrogateSelector.AddSurrogate(typeof (Transform), new StreamingContext(StreamingContextStates.All), transformSurrogate);
 
             formatter.SurrogateSelector = surrogateSelector;
 
