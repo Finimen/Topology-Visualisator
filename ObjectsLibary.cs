@@ -14,6 +14,7 @@ namespace Assets.Scripts.Topology
             topologyObjects = new List<TopologyObject>(count);
             transitions = new List<Transition>(count);
             Classes = new List<Class>(count);
+            Transitions = new List<Transition>(count);
         }
 
         public void Add(TopologyObject topologyObject)
@@ -34,6 +35,7 @@ namespace Assets.Scripts.Topology
         public void Add(Transition transition)
         {
             transitions.Add(transition);
+            Transitions.Add(transition);
         }
 
         public void Remove(Transition transition)

@@ -56,8 +56,8 @@ namespace Assets.Scripts.SaveSystem
             {
                 TransitionData data = new TransitionData()
                 {
-                    StartPosition = transitionToSave.StartPosition,
-                    EndPosition = transitionToSave.EndPosition,
+                    //StartPosition = transitionToSave.StartPosition,
+                    //EndPosition = transitionToSave.EndPosition,
                     BlackgroundColor = transitionToSave.BlackgroundColor,
                 };
 
@@ -99,8 +99,8 @@ namespace Assets.Scripts.SaveSystem
             {
                 Transition transitionClone = Instantiate(transitionPrefab, canvasTransition);
 
-                transitionClone.StartPosition = data.StartPosition;
-                transitionClone.EndPosition = data.EndPosition;
+                //transitionClone.StartPosition = data.StartPosition;
+                //transitionClone.EndPosition = data.EndPosition;
                 transitionClone.BlackgroundColor = data.BlackgroundColor;
 
                 transitions.Add(transitionClone);

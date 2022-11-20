@@ -67,9 +67,11 @@ namespace Assets.Scripts.SaveSystem
 
             Vector3SerializationSurrogate vector3Surrogate = new Vector3SerializationSurrogate();
             QuaternionSerializationSurrogate quaternionSurrogate = new QuaternionSerializationSurrogate();
+            ColorSerializationSurrogate colorSerializationSurrogate = new ColorSerializationSurrogate();
 
             surrogateSelector.AddSurrogate(typeof(Vector3), new StreamingContext(StreamingContextStates.All), vector3Surrogate);
             surrogateSelector.AddSurrogate(typeof(Quaternion), new StreamingContext(StreamingContextStates.All), quaternionSurrogate);
+            surrogateSelector.AddSurrogate(typeof(Color), new StreamingContext(StreamingContextStates.All), colorSerializationSurrogate);
 
             formatter.SurrogateSelector = surrogateSelector;
 
