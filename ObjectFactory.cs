@@ -1,4 +1,5 @@
 using Assets.Scripts.InputSystem;
+using Assets.Scripts.ReturnSystem;
 using Assets.Scripts.SaveSystem;
 using Assets.Scripts.Topology;
 using Unity.VisualScripting;
@@ -50,6 +51,8 @@ namespace Assets.Scripts
             newClass.GetComponent<MoveableObject>().Setup(inputServise);
 
             objectsLibary.Add(newClass);
+
+            Undo.Record("default", objectsLibary);
         }
 
         public void CreateInterface()
@@ -61,6 +64,8 @@ namespace Assets.Scripts
             newInterface.GetComponent<MoveableObject>().Setup(inputServise);
 
             objectsLibary.Add(newInterface);
+
+            Undo.Record("default", objectsLibary);
         }
 
         public void CreateTransition()
@@ -72,6 +77,8 @@ namespace Assets.Scripts
             transition.StartPosition = inputServise.SelectedTopologyObject.GetComponent<RectTransform>();
 
             objectsLibary.Add(transition);
+
+            Undo.Record("default", objectsLibary);
         }
 
         private void Select(TopologyObject objectSelected)

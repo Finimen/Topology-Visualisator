@@ -7,16 +7,18 @@ namespace Assets.Scripts.SaveSystem
 {
     internal class SerializationManager
     {
-        public static bool Save(string saveName, object saveData)
+        public static bool Save(string saveName, string folder, object saveData)
         {
             BinaryFormatter formatter = GetBinaryFormatter();
 
-            if(!Directory.Exists(Application.persistentDataPath + "/saves"))
+            UnityEngine.Debug.Log(Application.persistentDataPath + folder);
+
+            if(!Directory.Exists(Application.persistentDataPath + folder))
             {
-                Directory.CreateDirectory(Application.persistentDataPath + "/saves");
+                Directory.CreateDirectory(Application.persistentDataPath + folder);
             }
 
-            string path = Application.persistentDataPath + "/saves" + saveName + ".save";
+            string path = Application.persistentDataPath + folder + saveName + ".save";
 
             FileStream fileStream = File.Create(path);
 

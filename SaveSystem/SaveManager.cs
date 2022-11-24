@@ -17,22 +17,39 @@ namespace Assets.Scripts.SaveSystem
         [SerializeField] private Transform canvasTransition;
 
         [SerializeField] private string saveName;
-
-        [SerializeField] private string[] saveFiles;
+        [SerializeField] private string folder = "/saves/";
 
         public void SetSaveName(string saveName)
         {
             this.saveName = saveName;
         }
 
-        public void GetLoadFiles()
+        public void SetFolder(string folder)
         {
-            if(!Directory.Exists(Application.persistentDataPath + "/saves"))
+            this.folder = folder;
+        }
+
+        public void ClearFolder()
+        {
+            foreach(var file in GetLoadFiles())
             {
-                Directory.CreateDirectory(Application.persistentDataPath + "/saves");
+                File.Delete(file.Replace(@"\", @"/"));
+            }
+        }
+
+        [ContextMenu(nameof(GetLoadFiles))]
+        public string[] GetLoadFiles()
+        {
+            string savePath = Application.persistentDataPath + folder;
+
+            if (!Directory.Exists(savePath))
+            {
+                Directory.CreateDirectory(savePath);
             }
 
-            saveFiles = Directory.GetFiles(Application.persistentDataPath + "/saves");
+            string[] saveFiles = Directory.GetFiles(savePath);
+
+            return saveFiles;
         }
 
         [ContextMenu("Save")]
@@ -88,7 +105,7 @@ namespace Assets.Scripts.SaveSystem
                 }
                 catch
                 {
-                    UnityEngine.Debug.LogError("Erro setup TransformData");
+                    UnityEngine.Debug.LogError("Error setup TransformData");
                 }
 
                 transactionData.Add(data);
@@ -98,7 +115,7 @@ namespace Assets.Scripts.SaveSystem
             sceneData.InterfaceData = interfaceData;
             sceneData.TransactionData = transactionData;
 
-            SerializationManager.Save(saveName, sceneData);
+            SerializationManager.Save(saveName, folder, sceneData);
         }
 
         [ContextMenu("Load")]
@@ -108,7 +125,9 @@ namespace Assets.Scripts.SaveSystem
             List<Interface> interfaces = new List<Interface>();
             List<Transition> transitions = new List<Transition>();
 
-            SceneData sceneData = (SceneData)SerializationManager.Load(Application.persistentDataPath + "/saves" + saveName + ".save");
+            UnityEngine.Debug.Log(Application.persistentDataPath + folder + saveName + ".save");
+
+            SceneData sceneData = (SceneData)SerializationManager.Load(Application.persistentDataPath + folder + saveName + ".save");
 
             foreach (TopologyObjetcData data in sceneData.ClassData)
             {

@@ -103,10 +103,7 @@ namespace Assets.Scripts
             colorPicker.SetSelectedObject(sceneObject);
         }
 
-        public void Delete()
-        {
-            selectedSceneObject.Destroy();
-        }
+
 
         public void Rename(string name)
         {
@@ -287,11 +284,6 @@ namespace Assets.Scripts
             if (selectedSceneObject == null)
             {
                 return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Delete))
-            {
-                Delete();
             }
 
             if (inputServise.SelectedTopologyObject.VariablesUnchanged())

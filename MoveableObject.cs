@@ -2,6 +2,7 @@ using Assets.Scripts.InputSystem;
 using Assets.Scripts.Topology;
 using UnityEngine;
 using System;
+using Assets.Scripts.ReturnSystem;
 
 namespace Assets.Scripts
 {
@@ -62,6 +63,8 @@ namespace Assets.Scripts
 
                 if (Input.GetKeyUp(KeyCode.Mouse0))
                 {
+                    Undo.Record("defuat", FindObjectOfType<ObjectFactory>().ObjectsLibary);
+                        
                     movingStarted = false;
                 }
             }
