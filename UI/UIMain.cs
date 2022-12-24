@@ -1,20 +1,7 @@
-﻿/*               
-            ░███████╗██╗███╗░░██╗██╗██╗░░░░░██╗███████╗███╗░░██╗   ░██████╗███╗░░██╗██╗██████╗░███████╗██████╗░░
-			░██╔════╝██║████╗░██║██║████░░████║██╔════╝████╗░██║   ██╔════╝████╗░██║██║██╔══██╗██╔════╝██╔══██╗░
-			░███████╗██║██╔██╗██║██║██║░██░░██║█████╗░░██╔██╗██║   ╚█████╗░██╔██╗██║██║██████╔╝█████╗░░██████╔╝░
-			░██╔════╝██║██║╚████║██║██║░░░░░██║██╔══╝░░██║╚████║   ░╚═══██╗██║╚████║██║██╔═══╝░██╔══╝░░██╔══██╗░
-			░██║░░░░░██║██║░╚███║██║██║░░░░░██║███████╗██║░╚███║   ██████╔╝██║░╚███║██║██║░░░░░███████╗██║░░██║░
-			░╚═╝░░░░░╚═╝╚═╝░░╚══╝╚═╝╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚══╝   ╚═════╝░╚═╝░░╚══╝╚═╝╚═╝░░░░░╚══════╝╚═╝░░╚═╝░
-____________________________________________________________________________________________________________________________________________
-                █▀▀▄ █──█ 　 ▀▀█▀▀ █──█ █▀▀ 　 ░█▀▀▄ █▀▀ ▀█─█▀ █▀▀ █── █▀▀█ █▀▀█ █▀▀ █▀▀█ 
-                █▀▀▄ █▄▄█ 　 ─░█── █▀▀█ █▀▀ 　 ░█─░█ █▀▀ ─█▄█─ █▀▀ █── █──█ █──█ █▀▀ █▄▄▀ 
-                ▀▀▀─ ▄▄▄█ 　 ─░█── ▀──▀ ▀▀▀ 　 ░█▄▄▀ ▀▀▀ ──▀── ▀▀▀ ▀▀▀ ▀▀▀▀ █▀▀▀ ▀▀▀ ▀─▀▀
-____________________________________________________________________________________________________________________________________________
-*/
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
+using Assets.Scripts.TweenTools;
 
-namespace Robots.MainCore.UI
+namespace Assets.Scripts.UI
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(AudioSource))]
@@ -52,9 +39,9 @@ namespace Robots.MainCore.UI
             audioSource.PlayOneShot(audioClip);
         }
 
-        public void SetCurrentUI(UIElement uIElement)
+        public void SetCurrentUI(LeanTweenBehaviour uIElement)
         {
-            UIManager.Instance.UpdateCurrentUI(uIElement, timeScale , hideLast);
+            UIManager.Instance.UpdateCurrentUI(uIElement, hideLast);
         }
 
         public void Instansate(GameObject gameObjectPrefab)
@@ -110,11 +97,6 @@ namespace Robots.MainCore.UI
         public void EnableMonoBehaviour(MonoBehaviour monoBehaviour)
         {
             monoBehaviour.enabled = true;
-        }
-
-        public void LoadSceneIndex(int sceneIndex)
-        {
-            SceneManager.LoadScene(sceneIndex);
         }
     }
 }

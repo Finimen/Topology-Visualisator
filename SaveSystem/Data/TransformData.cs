@@ -3,11 +3,12 @@ using UnityEngine;
 
 namespace Assets.Scripts.SaveSystem.Data
 {
-    [Serializable] internal class TransformData
+    [Serializable] internal struct TransformData
     {
         public Vector3 Position;
-        public Quaternion Rotation;
         public Vector3 Scale;
+
+        public Quaternion Rotation;
 
         public TransformData(Vector3 position, Quaternion rotation, Vector3 scale)
         {

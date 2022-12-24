@@ -10,19 +10,17 @@ public class Initializer : MonoBehaviour
 {
     [SerializeField] private ObjectFactory objectFactory;
 
+    [SerializeField] private FastActions fastAction;
+
     [Inject] private Camera cameraMain;
 
     [Inject] private InputServise inputServise;
 
     [Inject] private CanvasesData canvasesData;
 
-    private FastActions fastAction;
-
     private void Awake()
     {
         objectFactory.Initialize(cameraMain);
-
-        fastAction = new FastActions();
 
         fastAction.Enable(inputServise, canvasesData.TopologyObjets);
 

@@ -3,6 +3,8 @@ using Assets.Scripts.Topology;
 using Assets.Scripts.Windows;
 using Assets.Scripts.InputSystem;
 using Zenject;
+using System.Collections;
+using Unity.VisualScripting;
 
 namespace Assets.Scripts
 {
@@ -16,31 +18,34 @@ namespace Assets.Scripts
 
         private bool menuOpened;
 
-        public void Close()
-        {
-            menuOpened = false; 
-
-            editMenu.gameObject.SetActive(false);
-        }
-
         private void Start()
         {
-            editMenu.gameObject.SetActive(false);
+            editMenu.AlphaController.SetArrayAlpha(0);
         }
 
         private void OnEnable()
         {
             inputServise.OnGameObjectSelected += Select;
+            inputServise.OnKeyPressed += OnKeyPressed;
         }
 
         private void OnDisable()
         {
             inputServise.OnGameObjectSelected -= Select;
+            inputServise.OnKeyPressed -= OnKeyPressed;
+        }
+
+        private void OnKeyPressed(KeyCode pressedKey)
+        {
+            if (pressedKey != KeyCode.Mouse0 || pressedKey != KeyCode.Mouse1)
+            {
+                editMenu.AlphaController.SetArrayAlpha(0);
+            }
         }
 
         private void Select(GameObject objectSelected)
         {
-            if(!Input.GetKeyDown(KeyCode.Mouse1) && !Input.GetKeyDown(KeyCode.Mouse0))
+            if (!Input.GetKeyDown(KeyCode.Mouse1) && !Input.GetKeyDown(KeyCode.Mouse0))
             {
                 return;
             }
@@ -54,12 +59,16 @@ namespace Assets.Scripts
             else if (Input.GetKeyDown(KeyCode.Mouse0) && objectSelected.GetComponentInParent<TopologyObject>())
             {
                 editPanel.Select(objectSelected.GetComponentInParent<TopologyObject>().transform);
+
+                StartCoroutine(ShowEditMenuWithDelay());
+
+                return;
             }
             else if (Input.GetKeyDown(KeyCode.Mouse1) && objectSelected.GetComponentInParent<TopologyObject>())
             {
                 editPanel.Select(objectSelected.GetComponentInParent<TopologyObject>().transform);
 
-                editMenu.gameObject.SetActive(true);
+                editMenu.AlphaController.SetArrayAlpha(1);
 
                 editMenu.transform.position = Input.mousePosition;
 
@@ -74,7 +83,7 @@ namespace Assets.Scripts
                 return;
             }
 
-            editMenu.gameObject.SetActive(false);
+            editMenu.AlphaController.SetArrayAlpha(0);
         }
 
         private void SelectStateMenu()
@@ -91,6 +100,13 @@ namespace Assets.Scripts
             {
                 editMenu.gameObject.SetActive(false);
             }
+        }
+
+        private IEnumerator ShowEditMenuWithDelay()
+        {
+            yield return new WaitForSeconds(1);
+
+            editMenu.AlphaController.SetArrayAlpha(0);
         }
     }
 }

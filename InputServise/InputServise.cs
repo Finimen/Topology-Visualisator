@@ -3,20 +3,19 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static Tayx.Graphy.GraphyManager;
 
 namespace Assets.Scripts.InputSystem
 {
     public class InputServise : MonoBehaviour
     {
-        public Action<KeyCode> OnKeyPressed;
+        public event Action<KeyCode> OnKeyPressed;
         
-        public Action<ISceneObject> OnISceneObjectSelected;
-        
-        public Action<TopologyObject> OnTopologyObjectSelected;
-        public Action<GameObject> OnGameObjectSelected;
+        public event Action<ISceneObject> OnISceneObjectSelected;
 
-        public Action OnVoidSelected;
+        public event Action<TopologyObject> OnTopologyObjectSelected;
+        public event Action<GameObject> OnGameObjectSelected;
+
+        public event Action OnVoidSelected;
 
         [SerializeField] private KeyCode mouse0;
         [SerializeField] private KeyCode mouse1;
@@ -24,7 +23,7 @@ namespace Assets.Scripts.InputSystem
         public TopologyObject SelectedTopologyObject
         {
             get;
-            private set; 
+            private set;
         }
 
         public GameObject SelectedGameObject

@@ -46,10 +46,10 @@ namespace Assets.Scripts.Topology
         {
             variablesIsActive = !variablesIsActive;
 
-            SelectStateVariables(variablesIsActive);
+            SetStateVariables(variablesIsActive);
         }
 
-        public void SelectStateVariables(bool state)
+        protected void SetStateVariables(bool state)
         {
             float currentOffest = offest * transform.localScale.x;
 
@@ -64,19 +64,14 @@ namespace Assets.Scripts.Topology
             {
                 foreach (var variableData in variables)
                 {
-                    VariableContainer variableUI = Instantiate(variablePrefab, transform);
+                    VariableContainer variableUI = Instantiate(variablePrefab, group);
 
-                    variableUI.transform.position = new Vector3(variablesPosition.position.x, variablesPosition.position.y - currentOffest
-                        * (spawnedVariableContainers.Count + 1), variablesPosition.position.z);
+                    variableUI.ProtectAndName.text = $"{variableData.ProtectType} {variableData.Type} {variableData.Name}";
 
-                    variableUI.transform.rotation = transform.rotation;
-
-                    variableUI.ProtectAndName.text = variableData.ProtectType + " " + variableData.Name;
+                    variableUI.transform.SetSiblingIndex(variablesPosition.GetSiblingIndex() + 1);
 
                     spawnedVariableContainers.Add(variableUI);
                 }
-
-                methodsPosition.GetComponent<FollowTarget>().Target = spawnedVariableContainers[spawnedVariableContainers.Count - 1].transform;
             }
             else
             {
@@ -86,12 +81,17 @@ namespace Assets.Scripts.Topology
 
                     spawnedVariableContainers.Remove(spawnedVariableContainers[0]);
                 }
-
-                methodsPosition.GetComponent<FollowTarget>().Target = variablesPosition;
             }
         }
 
         public override void SelectStateMethods()
+        {
+            methodsIsActive = !methodsIsActive;
+
+            SetStateMethods(methodsIsActive);
+        }
+
+        public void SetStateMethods(bool state)
         {
             float currentOffest = offest * transform.localScale.x;
 
@@ -102,29 +102,13 @@ namespace Assets.Scripts.Topology
                 return;
             }
 
-            methodsIsActive = !methodsIsActive;
-
-            if (methodsIsActive)
+            if (state)
             {
                 foreach (var methodData in methods)
                 {
                     MethodContainer methodUI = Instantiate(methodPrefab, transform);
 
-                    methodUI.transform.position = new Vector3(methodsPosition.position.x, methodsPosition.position.y - currentOffest
-                        * (spawnedMethodContainers.Count + 1), methodsPosition.position.z);
-
-                    methodUI.transform.rotation = transform.rotation;
-
                     methodUI.ProtectAndName.text = methodData.ProtectType + " " + methodData.ReturnedType + " " + methodData.Name + methodData.Arguments;
-
-                    if (spawnedMethodContainers.Count == 0)
-                    {
-                        methodUI.GetComponent<FollowTarget>().Target = methodsPosition;
-                    }
-                    else
-                    {
-                        methodUI.GetComponent<FollowTarget>().Target = spawnedMethodContainers[spawnedMethodContainers.Count - 1].transform;
-                    }
 
                     spawnedMethodContainers.Add(methodUI);
                 }

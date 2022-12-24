@@ -9,22 +9,15 @@ namespace Assets.Scripts
     [RequireComponent(typeof(TopologyObject))]
     public class MoveableObject : MonoBehaviour
     {
-        public Action OnMove;
+        public event Action OnMove;
 
         private InputServise inputServise;
 
         private TopologyObject current;
 
-        private Camera cameraMain;
-
         private Vector3 offest;
 
         private bool movingStarted;
-
-        public void Initialize(Camera camera)
-        {
-            cameraMain = camera;
-        }
 
         public void Setup(InputServise inputServise)
         {
@@ -49,6 +42,7 @@ namespace Assets.Scripts
 
             if (Input.GetKeyDown(KeyCode.Mouse0) && objectSelected == current)
             {
+
                 movingStarted = true;
 
                 offest = Input.mousePosition - transform.position;
@@ -59,14 +53,21 @@ namespace Assets.Scripts
         {
             if (movingStarted)
             {
-                Move(Input.mousePosition);
+                if(inputServise.SelectedTopologyObject != current && inputServise.SelectedTopologyObject.IsMove)
+                {
+                    movingStarted = false;
+                }
 
                 if (Input.GetKeyUp(KeyCode.Mouse0))
                 {
                     Undo.Record("defuat", FindObjectOfType<ObjectFactory>().ObjectsLibary);
-                        
+
                     movingStarted = false;
                 }
+
+                Move(Input.mousePosition);
+
+                current.IsMove = movingStarted;
             }
         }
 

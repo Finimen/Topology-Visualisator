@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.SceneControls
 {
-    public class FastActions
+    public class FastActions : MonoBehaviour
     {
         private Transform canvas;
 
@@ -15,12 +15,25 @@ namespace Assets.Scripts.SceneControls
 
         private TopologyObject selectedSceneObject;
 
-        private KeyCode fastActionKey = KeyCode.LeftControl;
+        [SerializeField] private KeyCode fastActionKey = KeyCode.LeftControl;
 
-        private KeyCode returnKey = KeyCode.Z;
-        private KeyCode copyKey = KeyCode.C;
-        private KeyCode pasteKey = KeyCode.V;
-        private KeyCode duplicateKey = KeyCode.D;
+        [SerializeField] private KeyCode returnKey = KeyCode.Z;
+        [SerializeField] private KeyCode copyKey = KeyCode.C;
+        [SerializeField] private KeyCode pasteKey = KeyCode.V;
+        [SerializeField] private KeyCode duplicateKey = KeyCode.D;
+
+        public bool CopiedObjectIsNull
+        {
+            get
+            {
+                if (copiedObject)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
 
         public void Enable(InputServise inputServise, Transform canvas)
         {
@@ -73,7 +86,7 @@ namespace Assets.Scripts.SceneControls
             Undo.Return();
         }
 
-        private void Copy()
+        public void Copy()
         {
             if (inputServise.SelectedTopologyObject)
             {
@@ -85,14 +98,14 @@ namespace Assets.Scripts.SceneControls
             UnityEngine.Debug.Log(nameof(Copy));
         }
 
-        private void Paste()
+        public void Paste()
         {
             if(copiedObject == null)
             {
                 return;
             }
 
-            TopologyObject topologyObject = MonoBehaviour.Instantiate(copiedObject, canvas);
+            TopologyObject topologyObject = Instantiate(copiedObject, canvas);
 
             topologyObject.transform.position = inputServise.MousePosition;
 
@@ -105,7 +118,7 @@ namespace Assets.Scripts.SceneControls
         {
             if (inputServise.SelectedTopologyObject)
             {
-                TopologyObject topologyObject = MonoBehaviour.Instantiate(inputServise.SelectedTopologyObject, canvas);
+                TopologyObject topologyObject = Instantiate(inputServise.SelectedTopologyObject, canvas);
 
                 topologyObject.transform.position = inputServise.MousePosition;
 
@@ -115,13 +128,13 @@ namespace Assets.Scripts.SceneControls
             UnityEngine.Debug.Log(nameof(Duplicate));
         }
 
-        private void Delete()
+        public void Delete()
         {
-            //Undo.Record("defuat", MonoBehaviour.FindObjectOfType<ObjectFactory>().ObjectsLibary);
+            //Undo.Record("defuat", FindObjectOfType<ObjectFactory>().ObjectsLibary);
 
             if (inputServise.SelectedTopologyObject)
             {
-                MonoBehaviour.Destroy(inputServise.SelectedTopologyObject.gameObject);
+                inputServise.SelectedTopologyObject.Destroy();
             }
         }
     }

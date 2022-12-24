@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.SaveSystem.Data
 {
-    [Serializable] internal class TransitionData
+    [Serializable] internal struct TransitionData
     {
         public TransformData StartPosition;
         public TransformData EndPosition;

@@ -110,6 +110,11 @@ namespace Assets.Scripts
             inputServise.SelectedTopologyObject.Rename(name);
         }
 
+        public void ResetParrent(string newParrent)
+        {
+            inputServise.SelectedTopologyObject.ResetParrent(newParrent);
+        }
+
         public void AddVariable(Variable variable)
         {
             inputServise.SelectedTopologyObject.AddVariable(variable);

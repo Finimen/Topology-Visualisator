@@ -7,13 +7,14 @@ namespace Assets.Scripts.Topology
     public abstract class TopologyObject : MonoBehaviour, ISceneObject
     {
         [SerializeField] protected Transform variablesPosition;
-        [SerializeField] protected Transform methodsPosition;
-                         
+
+        [SerializeField] protected Transform group;
+
         [SerializeField] protected Image blackgroundImage;
                          
         [SerializeField] protected Text typeText;
         [SerializeField] protected Text nameText;
-                         
+
         [SerializeField] protected Color blackgroundColor;
                          
         [SerializeField] protected List<Variable> variables;
@@ -22,7 +23,15 @@ namespace Assets.Scripts.Topology
 
         [SerializeField] protected new string name;
 
+        [SerializeField] protected string parrent = "object";
+
         [SerializeField] protected float offest;
+
+        public bool IsMove
+        {
+            get; 
+            set;
+        }
 
         public abstract List<Variable> Variables
         { 
@@ -59,6 +68,11 @@ namespace Assets.Scripts.Topology
         public void Rename(string name)
         {
             this.name = name;
+        }
+
+        public void ResetParrent(string newParrent)
+        {
+            parrent = newParrent;
         }
 
         public void AddVariable(Variable variable)

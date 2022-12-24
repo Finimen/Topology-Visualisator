@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets.Scripts.SaveSystem.Data
 {
     [Serializable]
-    public class TopologyObjetcData
+    public struct TopologyObjetcData
     {
         public List<Variable> Variables;
         public List<Method> Methods;
