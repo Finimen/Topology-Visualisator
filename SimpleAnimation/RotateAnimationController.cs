@@ -21,8 +21,6 @@ namespace Assets.Scripts.SimpleAnimationSystem
         private void Rotate(float xAngle)
         {
             target.Rotate(xAngle, xAngle, xAngle);
-
-            UnityEngine.Debug.Log("DDDDDDDDDDDDDDD");
         }
     }
 }

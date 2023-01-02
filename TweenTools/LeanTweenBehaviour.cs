@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.TweenTools
 {
-    internal class LeanTweenBehaviour : MonoBehaviour
+    public class LeanTweenBehaviour : MonoBehaviour
     {
         [SerializeField] private Transform showed;
         [SerializeField] private Transform hidden;

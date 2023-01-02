@@ -13,8 +13,6 @@ namespace Assets.Scripts.Topology
         [SerializeField] private bool variablesIsActive;
         [SerializeField] private bool methodsIsActive;
 
-        [SerializeField] private string classParrent;
-
         private List<VariableContainer> spawnedVariableContainers = new List<VariableContainer>();
         private List<MethodContainer> spawnedMethodContainers = new List<MethodContainer>();
 
@@ -146,9 +144,25 @@ namespace Assets.Scripts.Topology
 
         private void Update()
         {
-            nameText.text = name + " : " + classParrent;
+            nameText.text = name + " : " + parrent;
 
             blackgroundImage.color = blackgroundColor;
+
+            variablesIsActive = true;
+
+            if (variablesIsActive && spawnedVariableContainers.Count != variables.Count)
+            {
+                SelectStateVariables();
+                SelectStateVariables();
+            }
+
+            methodsIsActive = true;
+
+            if (methodsIsActive && spawnedMethodContainers.Count != methods.Count)
+            {
+                SelectStateMethods();
+                SelectStateMethods();
+            }
         }
     }
 }

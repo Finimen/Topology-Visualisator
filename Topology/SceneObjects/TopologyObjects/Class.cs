@@ -153,10 +153,20 @@ namespace Assets.Scripts.Topology
 
             blackgroundImage.color = blackgroundColor;
 
-            if(variablesIsActive && spawnedVariableContainers.Count != variables.Count)
+            variablesIsActive = true;
+
+            if (variablesIsActive && spawnedVariableContainers.Count != variables.Count)
             {
                 SelectStateVariables();
                 SelectStateVariables();
+            }
+
+            methodsIsActive = true;
+
+            if(methodsIsActive && spawnedMethodContainers.Count != methods.Count)
+            {
+                SelectStateMethods();
+                SelectStateMethods();
             }
         }
     }
